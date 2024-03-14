@@ -1,40 +1,127 @@
 import json
-from collections import defaultdict
 
-# 读取文件
-file_path = '../source_data/hpo_relations.txt'  # 将'your_file.txt'替换为你的文件路径
-with open(file_path, 'r') as file:
-    lines = file.readlines()
+def is_connected(ref_hpo_list, query_hpo):
+    parent_nodes = []
+    parent_nodes_second = []
+    with open('../source_data/hpo_parents.json', 'r') as f:
+        data = json.load(f)
+    vocab = list(data.keys())
+    for term in ref_hpo_list:
+        if term in vocab:
+            # 当前节点有父亲节点
+            parent_nodes.extend(data[term])
+        else:
+            # 当前节点无父亲节点
+            pass
+    # 第二次查询
+    for term in parent_nodes:
+        if term in vocab:
+            parent_nodes_second.extend(data[term])
 
-hpo_dict = defaultdict(list)
-current_hpo = None
+    parent_query = []
+    parent_query_sencond = []
 
-state = 0
-# 遍历文件内容
-count = 0
-for line in lines:
-    line = line.strip()
-    if line.startswith('term-HP:'):
-        state = 0
-        current_hpo = line.split(':')[-1].strip()
-
-    if line.startswith('Parents:'):
-        state = 1
-        continue
-
-    if line.startswith('Children:'):
-        state = 2
-
-    if state == 1:
-        parents_line = line
-        parents = parents_line.split('-')[0][:-1]
-        hpo_dict[current_hpo].append(parents)
+    for term in query_hpo:
+        if term in vocab:
+            parent_query.extend(data[term])
 
 
+    for term in parent_query:
+        if term in vocab:
+            parent_query_sencond.extend(data[term])
 
-# 将字典保存为JSON文件
-output_json_path = '../source_data/hpo_parents.json'
-with open(output_json_path, 'w') as json_file:
-    json.dump(hpo_dict, json_file, indent=2)
+    for term in parent_query_sencond:
+        if term in parent_nodes_second:
+            return True
+    return False
 
-print(f'JSON文件已保存至: {output_json_path}')
+def is_simulation(ref_hpo_list, specific_hpo):
+    _specific = get_specific(ref_hpo_list, specific_hpo)
+    if len(ref_hpo_list) - len(_specific) >= 2 and len(ref_hpo_list) >= 3:
+        return True
+    else:
+        return False
+
+import random
+import numpy as np
+def random_remove(ref_hpo_list, specific_hpo, if_test=False):
+    choice = range(10, 50, 1)
+    _per = random.choice(choice) / 100
+    _spe = get_specific(ref_hpo_list=ref_hpo_list, specific_hpo=specific_hpo)
+    _normal_term = set(ref_hpo_list) - set(_spe)
+    _rm_len = np.round(_per * len(_normal_term), 0)
+    if if_test:
+        print(int(_rm_len))
+        print(list(_normal_term))
+    for i in range(int(_rm_len)):
+        _rm = random.choice(list(_normal_term))
+        _normal_term.remove(_rm)
+    if if_test:
+        print(_spe)
+    _sim_hpo = list(_normal_term) + _spe
+    if if_test:
+        print(_sim_hpo)
+    return list(_sim_hpo)
+
+
+def get_specific(ref_hpo_list, specific_hpo):
+    specific_hpo_set = set(specific_hpo)
+    return [term for term in ref_hpo_list if term in specific_hpo_set]
+
+def remove_duplicate(save_omim_id, save_sim_hpo):
+    unique_omim_id = []
+    unique_sim_hpo = []
+    seen = list()  # 用于记录已经出现过的元素
+    for i in range(len(save_sim_hpo)):
+        # 构建一个唯一标识符
+        identifier = (save_omim_id[i], save_sim_hpo[i])
+        # 如果该标识符已经出现过，则跳过
+        if identifier in seen:
+            continue
+        # 否则将其添加到结果列表中，并记录该标识符
+        unique_omim_id.append(save_omim_id[i])
+        unique_sim_hpo.append(save_sim_hpo[i])
+        seen.append(identifier)
+    return unique_omim_id, unique_sim_hpo
+
+def get_change(ref, specific_list, relation):
+    new_ref = []
+    old_ref = []
+
+    choices = random.choice(range(10, 50, 1)) / 100
+    change_len = np.round(len(ref) * choices, 0)
+    _specific = get_specific(ref, specific_list)
+    for term in _specific:
+        ref.remove(term)
+    relation_choice = random.choice([1, 2])
+    if len(ref) == 0:
+        print('specific only')
+        return -1
+    count = 0
+    while len(old_ref) < change_len:
+        if count == 100:
+            print('error', ref)
+
+            break
+        count += 1
+        selected_term = random.choice(ref)
+        if selected_term in (relation.keys()):
+            parent_level_1 = relation[selected_term]
+            if relation_choice == 1:
+                if parent_level_1 != 0:
+                    old_ref.append(selected_term)
+                    new_ref.append(random.choice(parent_level_1))
+            elif relation_choice == 2:
+                parent_level_2 = []
+                for term in parent_level_1:
+                    if term in list(relation.keys()):
+
+                        parent_level_2.extend(relation[term])
+                if len(parent_level_2) != 0:
+                    old_ref.append(selected_term)
+                    new_ref.append(random.choice(parent_level_2))
+
+    for term in np.unique(old_ref):
+        ref.remove(term)
+    ref.extend(new_ref)
+    return ref

@@ -16,7 +16,7 @@ for line in lines:
     line = line.strip()
     if line.startswith('term-HP:'):
         state = 0
-        current_hpo = line.split(':')[-1].strip()
+        current_hpo = line.split('-')[-1]
 
     if line.startswith('Parents:'):
         state = 1
