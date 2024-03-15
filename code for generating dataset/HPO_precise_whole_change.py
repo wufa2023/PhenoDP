@@ -13,6 +13,9 @@ specific_list = df['hpo'].values
 with open("../source_data/hpo_parents.json", "r") as json_file:
     omim_parents = json.load(json_file)
 
+import pandas as pd
+df = pd.read_csv('../source_data/precise_remove.csv')
+df.values['']
 import random
 import numpy as np
 from utils import *
