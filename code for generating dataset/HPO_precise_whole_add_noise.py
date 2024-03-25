@@ -1,6 +1,12 @@
 # used for dataset: whole precise + noise
 from utils import *
 
+# 读取precise terms
+# 提取关系链条, 添加noise,
+## 先找出当前OMIM HPO的前俩代的父母节点，组成一个list
+## 随机从HPO表中选出特定数量的HPO，找出俩代父母节点，随后进行比对
+## 挑选出的HPO俩代节点不与OMIM挑出的俩代节点重合，即认为是不相关
+
 # read data
 import json
 import pandas as pd
@@ -20,7 +26,7 @@ omim_id = list(data.keys())
 import numpy as np
 import random
 
-for _ in range(10):
+for _ in range(5):
     print('iter', _)
     for i in range(len(omim_id)):
         print(i)
@@ -31,12 +37,17 @@ for _ in range(10):
         add_len = (random.choice(choice) / 100) * len(ref)
         _noise_len = np.round(add_len, 0)
         noise_list = []
+
+        print('raw len', len(ref), 'add_len', _noise_len)
+
         while len(noise_list) < _noise_len:
             term = random.choice(hpo_list)
             if term not in ref and is_connected(ref, term) == False:
                 noise_list.append(term)
             else:
                 continue
+        print('noise_list', noise_list)
+        print('_________________________')
         temp.extend(noise_list)
         save_omim.append(omim_id[i])
         save_hpo.append(temp)

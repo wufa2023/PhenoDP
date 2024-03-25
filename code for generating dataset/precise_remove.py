@@ -15,16 +15,15 @@ save_omim_id = []
 save_sim_hpo = []
 omim_id = list(data.keys())
 
-# 重复二十次
+#
 print(len(data.keys()))
-for _ in range(10):
+for _ in range(5):
     print('iter', _)
     for i in range(len(omim_id)):
         ref = data[omim_id[i]]
         temp = list(ref)
-        ## 查询omim疾病是否有特异词，至少有2个非特异词的疾病才被允许模拟生成
-        ## 且omim本身总体有3个以上的词
-        is_sim = is_simulation(ref_hpo_list=ref, specific_hpo=specific_list)
+        # is_sim = is_simulation(ref_hpo_list=ref, specific_hpo=specific_list)
+        is_sim = True
         if is_sim:
             ## 随机挑选10%～49%的非特异词进行删除
             sim_hpo = random_remove(ref_hpo_list=temp, specific_hpo=specific_list)

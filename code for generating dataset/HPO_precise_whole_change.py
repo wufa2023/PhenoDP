@@ -14,8 +14,9 @@ with open("../source_data/hpo_parents.json", "r") as json_file:
     omim_parents = json.load(json_file)
 
 import pandas as pd
-df = pd.read_csv('../source_data/precise_remove.csv')
-df.values['']
+# df = pd.read_csv('../source_data/precise_remove.csv')
+# print(df)
+# df.values['']
 import random
 import numpy as np
 from utils import *
@@ -23,7 +24,7 @@ save_omim = []
 save_hpo = []
 unique_omim = []
 unique_hpo = []
-for _ in range(10):
+for _ in range(5):
     print('curr', _)
     for i in range(len(omim_list)):
         print(i)

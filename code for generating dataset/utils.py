@@ -6,6 +6,8 @@ def is_connected(ref_hpo_list, query_hpo):
     with open('../source_data/hpo_parents.json', 'r') as f:
         data = json.load(f)
     vocab = list(data.keys())
+
+
     for term in ref_hpo_list:
         if term in vocab:
             # 当前节点有父亲节点
@@ -49,7 +51,16 @@ def random_remove(ref_hpo_list, specific_hpo, if_test=False):
     _per = random.choice(choice) / 100
     _spe = get_specific(ref_hpo_list=ref_hpo_list, specific_hpo=specific_hpo)
     _normal_term = set(ref_hpo_list) - set(_spe)
+    # if none normal terms left, return raw sentence
+    if len(_normal_term) == 0:
+        print('none normal word left, return raw sentences')
+        return ref_hpo_list
+
     _rm_len = np.round(_per * len(_normal_term), 0)
+
+    print('total words', len(ref_hpo_list), 'specific words', len(_spe),
+          'normal words', len(_normal_term), 'remove len', _rm_len)
+
     if if_test:
         print(int(_rm_len))
         print(list(_normal_term))
@@ -90,38 +101,71 @@ def get_change(ref, specific_list, relation):
 
     choices = random.choice(range(10, 50, 1)) / 100
     change_len = np.round(len(ref) * choices, 0)
+
+
     _specific = get_specific(ref, specific_list)
+
+    print('raw len', len(ref), 'specific len', len(_specific), 'change len', change_len)
+
     for term in _specific:
         ref.remove(term)
     relation_choice = random.choice([1, 2])
+
+
     if len(ref) == 0:
         print('specific only')
         return -1
+
     count = 0
     while len(old_ref) < change_len:
+
+        # add condition to prevent dead cycle
         if count == 100:
             print('error', ref)
 
             break
         count += 1
+
+        # select one term from references, and it will be changed to another similar term
         selected_term = random.choice(ref)
+
+        # now, we search relation space
         if selected_term in (relation.keys()):
+
+            # get the first relation space
             parent_level_1 = relation[selected_term]
+
+            # if not relation term left,
+            # we will not consider this term, and continue to select another one
+            if len(parent_level_1) == 0:
+                continue
+
+            # if term has relation terms, we will change it
+
+            # if model choice to change term from space 1, we will end search after first round
             if relation_choice == 1:
-                if parent_level_1 != 0:
-                    old_ref.append(selected_term)
-                    new_ref.append(random.choice(parent_level_1))
+                old_ref.append(selected_term)
+                new_ref.append(random.choice(parent_level_1))
+
+            # if search two level space
             elif relation_choice == 2:
                 parent_level_2 = []
                 for term in parent_level_1:
                     if term in list(relation.keys()):
-
                         parent_level_2.extend(relation[term])
+
                 if len(parent_level_2) != 0:
                     old_ref.append(selected_term)
                     new_ref.append(random.choice(parent_level_2))
+                else:
+                    continue
 
+    print('select old terms', old_ref)
+    print('new terms', new_ref)
+    # after we finish selecting new terms, we will replace old terms.
     for term in np.unique(old_ref):
         ref.remove(term)
     ref.extend(new_ref)
+
+    print('______________________')
     return ref
