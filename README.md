@@ -24,7 +24,7 @@ The generation process of all files is shown in the `.ipynb` file.
 
 The files generated in our experiment can be accessed from the following link:
 
-### the Summarizer:
+### the Summarizer
 https://drive.google.com/file/d/1fGk-YW5-JzK0X4MZvjVHrlEp2dxJY1VN/view?usp=drive_link, 
 ###  JC_sim_dict.pkl
 https://drive.google.com/file/d/1RomlngmYrp5xc0ZZRFWn2zqX42HZNcjk/view?usp=drive_link, 
