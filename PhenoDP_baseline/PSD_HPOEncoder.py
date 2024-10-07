@@ -13,6 +13,7 @@ import random
 import torch.nn.functional as F
 import pickle
 from scipy.stats import fisher_exact
+import torch.nn as nn
 
 def compute_kernel_bias(vecs, n_components):
     vecs = np.concatenate(vecs, axis=0)
