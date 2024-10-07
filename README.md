@@ -2,6 +2,7 @@ PhenoDP is a deep learning-based tool for assisting in the diagnosis of Mendelia
 It requires at least two files to be prepared in advance:
 
 JC_sim_dict.pkl
+
 a file measuring the JC similarity of all HPO terms to all diseases, with data type as a dictionary. 
 
 
