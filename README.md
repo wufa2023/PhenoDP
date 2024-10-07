@@ -22,6 +22,6 @@ The generation process of all files is shown in the `.ipynb` file.
 
 ## File Upload
 
-The three files used in our experiment will be uploaded to URL: 
+The files generated in our experiment can be accessed from the following link:
 
 https://drive.google.com/file/d/1fGk-YW5-JzK0X4MZvjVHrlEp2dxJY1VN/view?usp=drive_link, https://drive.google.com/file/d/1RomlngmYrp5xc0ZZRFWn2zqX42HZNcjk/view?usp=drive_link, https://drive.google.com/file/d/1AhtrQD3gRg9GMkJBeunf4WwbvMHbV4Cz/view?usp=drive_link, https://drive.google.com/file/d/1tFidecblExd4fYqv9J8Y5fu1KnIY-OGp/view?usp=drive_link
