@@ -1,6 +1,6 @@
 # PhenoDP
 
-PhenoDP is a deep learning-based tool for assisting in the diagnosis of Mendelian genetic diseases. It requires at least two files to be prepared in advance:
+PhenoDP requires at least two files to be prepared in advance:
 
 ## Required Files
 
