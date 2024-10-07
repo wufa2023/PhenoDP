@@ -50,7 +50,7 @@ def get_vec_for_d(d):
     vec = vec / len(d.hpo)    
     return vec
 
-def get_average_embedding(text):
+def get_average_embedding(text, tokenizer, T5model):
     input_ids = tokenizer.encode(text, return_tensors='pt')
     with torch.no_grad():
         outputs = T5model.encoder(input_ids=input_ids)
@@ -65,9 +65,9 @@ def process_sentence(sentence):
     token_ids = tokenizer.convert_tokens_to_ids(filtered_tokens)
     return token_ids
     
-def get_vec(hp):
+def get_vec(hp, tokenizer, T5model):
     obj = Ontology.get_hpo_object(hp)
-    return get_average_embedding(obj.name)
+    return get_average_embedding(obj.name, tokenizer, T5model)
     
 def nx_to_dgl(nx_graph):
     dgl_graph = dgl.from_networkx(nx_graph)
