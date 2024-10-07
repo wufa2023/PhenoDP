@@ -1,19 +1,29 @@
-from sentence_transformers import SentenceTransformer, LoggingHandler
-from sentence_transformers import models, util, datasets, evaluation, losses
-from transformers import AutoTokenizer, T5ForConditionalGeneration
-from torch.utils.data import DataLoader
-import torch
-import pandas as pd
+# Basic Libraries
 import numpy as np
-from pyhpo.ontology import Ontology
-import re
-from PhenoDP_Preprocess import PhenoDP_Initial
-from pyhpo.ontology import Ontology
+import pandas as pd
 import random
-import torch.nn.functional as F
 import pickle
+import re
 from scipy.stats import fisher_exact
+from tqdm import tqdm
+
+# PyTorch Libraries
+import torch
 import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import DataLoader
+
+# Transformers Libraries
+from transformers import AutoTokenizer, T5ForConditionalGeneration
+
+# Graph Neural Network Libraries
+import dgl
+import obonet
+import networkx as nx
+
+# Other Libraries
+from pyhpo.ontology import Ontology
+from PhenoDP_Preprocess import PhenoDP_Initial
 
 def compute_kernel_bias(vecs, n_components):
     vecs = np.concatenate(vecs, axis=0)
