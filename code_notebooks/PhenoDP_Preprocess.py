@@ -163,6 +163,22 @@ class PhenoDP_Initial:
         for count, i in enumerate(tqdm(self.hpo_list[start:end], desc="HPO Processing")):
             if i == 'HP:0000001' or i == 'HP:0000118':
                 self.hpo2normal_sim.append([0 for t in range(self.disease_len)])
+                self.processed_hpos_sim.append(i)
+                continue
+            hp2disease_sim = []
+            for count2, j in enumerate(self.disease_list):
+                hp2disease_sim.append(self.get_normal_sim(i, j))
+            self.hpo2normal_sim.append(hp2disease_sim)
+            self.processed_hpos_sim.append(i)
+        print('end')
+        return self.hpo2normal_sim, self.processed_hpos_sim
+    
+    def initial_sim_singlecore(self):
+        print('total hpo len:', len(self.hpo_list))
+        for count, i in enumerate(tqdm(self.hpo_list, desc="HPO Processing")):
+            if i == 'HP:0000001' or i == 'HP:0000118':
+                self.hpo2normal_sim.append([0 for t in range(self.disease_len)])
+                self.processed_hpos_sim.append(i)
                 continue
             hp2disease_sim = []
             for count2, j in enumerate(self.disease_list):
