@@ -1,18 +1,29 @@
-from sentence_transformers import SentenceTransformer, LoggingHandler
-from sentence_transformers import models, util, datasets, evaluation, losses
-from transformers import AutoTokenizer, T5ForConditionalGeneration
-from torch.utils.data import DataLoader
-import torch
-import pandas as pd
+# Basic Libraries
 import numpy as np
-from pyhpo.ontology import Ontology
-import re
-from PhenoDP_Preprocess import PhenoDP_Initial
-from pyhpo.ontology import Ontology
+import pandas as pd
 import random
-import torch.nn.functional as F
 import pickle
+import re
 from scipy.stats import fisher_exact
+from tqdm import tqdm
+
+# PyTorch Libraries
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import DataLoader
+
+# Transformers Libraries
+from transformers import AutoTokenizer, T5ForConditionalGeneration
+
+# Graph Neural Network Libraries
+import dgl
+import obonet
+import networkx as nx
+
+# Other Libraries
+from pyhpo.ontology import Ontology
+from PhenoDP_Preprocess import PhenoDP_Initial
 
 def compute_kernel_bias(vecs, n_components):
     vecs = np.concatenate(vecs, axis=0)
@@ -39,7 +50,7 @@ def get_vec_for_d(d):
     vec = vec / len(d.hpo)    
     return vec
 
-def get_average_embedding(text):
+def get_average_embedding(text, tokenizer, T5model):
     input_ids = tokenizer.encode(text, return_tensors='pt')
     with torch.no_grad():
         outputs = T5model.encoder(input_ids=input_ids)
@@ -54,9 +65,9 @@ def process_sentence(sentence):
     token_ids = tokenizer.convert_tokens_to_ids(filtered_tokens)
     return token_ids
     
-def get_vec(hp):
+def get_vec(hp, tokenizer, T5model):
     obj = Ontology.get_hpo_object(hp)
-    return get_average_embedding(obj.name)
+    return get_average_embedding(obj.name, tokenizer, T5model)
     
 def nx_to_dgl(nx_graph):
     dgl_graph = dgl.from_networkx(nx_graph)

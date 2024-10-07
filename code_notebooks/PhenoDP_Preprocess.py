@@ -6,6 +6,7 @@ import torch.nn.functional as F
 import numpy as np
 import torch
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
 
 class PhenoDP_Initial:
     def __init__(self, Ontology, ic_type='omim', sim_method='jc'):
@@ -119,35 +120,30 @@ class PhenoDP_Initial:
             sim = self.get_hpo2disease_sim(hp, disease)
             return sim * self.get_hpo_weight(hp)
     
+
+
     def initial(self):
-        for count, i in enumerate(self.hpo_list):
-            print('calculating...', i, '', count, '/', self.hpo_len)
+        for count, i in enumerate(tqdm(self.hpo_list, desc="HPO Processing")):
             if i == 'HP:0000001' or i == 'HP:0000118':
                 self.hpo2disease_scores.append([0 for t in range(self.disease_len)])
                 continue
             hp2disease_scores = []
-            
-            for count2, j in enumerate(self.disease_list):
-                #if count2 % 4000 == 0:
-                    #print('  current disease...', count2, '', '/', self.disease_len)
+            for j in self.disease_list:
                 hp2disease_scores.append(self.get_hpo2disease_score(i, j))
             self.hpo2disease_scores.append(hp2disease_scores)
             self.processed_hpos.append(i)
         print('end')
         return self.hpo2disease_scores, self.processed_hpos
-    
+
     def initial_split(self, start, end):
-        for count, i in enumerate(self.hpo_list[start:end]):
-            print('calculating...', i, '', count, '/', self.hpo_len)
+        print('total hpo len:', len(self.hpo_list))
+        for count, i in enumerate(tqdm(self.hpo_list[start:end], desc="HPO Processing")):
             if i == 'HP:0000001' or i == 'HP:0000118':
                 self.hpo2disease_scores.append([0 for t in range(self.disease_len)])
                 self.processed_hpos.append(i)
                 continue
             hp2disease_scores = []
-            
             for count2, j in enumerate(self.disease_list):
-                #if count2 % 4000 == 0:
-                    #print('  current disease...', count2, '', '/', self.disease_len)
                 hp2disease_scores.append(self.get_hpo2disease_score(i, j))
             self.hpo2disease_scores.append(hp2disease_scores)
             self.processed_hpos.append(i)
@@ -163,10 +159,26 @@ class PhenoDP_Initial:
             return sim 
         
     def initial_sim(self, start, end):
-        for count, i in enumerate(self.hpo_list[start:end]):
-            print('calculating...', i, '', count, '/', self.hpo_len)
+        print('total hpo len:', len(self.hpo_list))
+        for count, i in enumerate(tqdm(self.hpo_list[start:end], desc="HPO Processing")):
             if i == 'HP:0000001' or i == 'HP:0000118':
                 self.hpo2normal_sim.append([0 for t in range(self.disease_len)])
+                self.processed_hpos_sim.append(i)
+                continue
+            hp2disease_sim = []
+            for count2, j in enumerate(self.disease_list):
+                hp2disease_sim.append(self.get_normal_sim(i, j))
+            self.hpo2normal_sim.append(hp2disease_sim)
+            self.processed_hpos_sim.append(i)
+        print('end')
+        return self.hpo2normal_sim, self.processed_hpos_sim
+    
+    def initial_sim_singlecore(self):
+        print('total hpo len:', len(self.hpo_list))
+        for count, i in enumerate(tqdm(self.hpo_list, desc="HPO Processing")):
+            if i == 'HP:0000001' or i == 'HP:0000118':
+                self.hpo2normal_sim.append([0 for t in range(self.disease_len)])
+                self.processed_hpos_sim.append(i)
                 continue
             hp2disease_sim = []
             for count2, j in enumerate(self.disease_list):
