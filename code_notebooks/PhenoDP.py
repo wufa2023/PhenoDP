@@ -112,7 +112,10 @@ class PhenoDP:
         weight_list = []
         sim_list = []
         for hp in hps1:
-            sim_list.append(self.hp2disease_sim_dict[hp][str(d)])
+            try:
+                sim_list.append(self.hp2disease_sim_dict[hp][str(d)])
+            except:
+                return 0
             w = self.get_hpo_weight(hp)
             weight_list.append(w)
         weight_list = np.array(weight_list)
