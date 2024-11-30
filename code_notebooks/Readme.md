@@ -27,5 +27,5 @@ The **`pip_list`** records the environment we used to run PhenoDP, which has bee
 ### Hardware:
 Our experimental model was trained on a **GeForce RTX 3090** GPU.
 
-### lastest check point:
+### Lastest check point:
 2024/11/30
