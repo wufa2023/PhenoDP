@@ -9,9 +9,9 @@ We recommend that you download the data files directly from the homepage and the
 
 ### For Developers:
 You can refer to the training notebooks:
-- `PSD-HPOEncoder`
-- `PCL-HPOEncoder`
-- `Summarizer's training.ipynb`
+- `train~PSD-HPOEncoder.ipynb`
+- `train~PCL-HPOEncoder.ipynb`
+- `train~Summarizer's training.ipynb`
 
 These notebooks contain the default parameters, which you can adjust according to your needs.
 
