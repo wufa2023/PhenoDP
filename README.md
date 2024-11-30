@@ -3,7 +3,7 @@
 ## Instructions
 
 - Please refer to the [./code_notebooks/Readme.md](./code_notebooks/Readme.md) for tool usage instructions.
-- For the usage tutorial, refer to the [./code](./code).
+- For the usage tutorial, refer to the [./code_notebooks](./code_notebooks).
 
 PhenoDP requires at least two files to be prepared in advance:
 
