@@ -22,7 +22,7 @@ Please directly download the provided files in `code_in_version_2`: `PCLHPOEncod
 
 To use PhenoDP, refer to the following notebooks:  
 - `Run_Ranker_Recommender.ipynb`: For running the Ranker and Recommender.  
-- `Summary_Generation.ipynb`: For generating summaries.
+- `Use the summarizer..ipynb`: For generating summaries.
 
 ## Environment for Ranker and Recommender
 - **Python**: 3.7.3  
