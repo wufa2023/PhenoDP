@@ -46,4 +46,4 @@ To use PhenoDP, refer to the following notebooks:
 In the latest version, we have separated the Python environments for the summarizer and the Ranker/Recommender. This decision was made primarily because the summarizer can utilize more advanced language models to ensure enhanced functionality. This inevitably requires the use of more advanced versions of Torch. However, the Ranker and Recommender, which are based on Torch 1.9.0, may encounter errors when using these more advanced Torch versions. To avoid such errors, we have maintained Torch 1.9.0 for the Ranker and Recommender, while allowing the summarizer to use any advanced version of Torch.
 
 We have provided the four preprocessed files and the model weight files directly in the link below:  
-[Link to the files](#)
+https://drive.google.com/drive/u/0/folders/1S6ZJC-5YaM18o7D0sjJ3Ae_w5jO_bMBt
