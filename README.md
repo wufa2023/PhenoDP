@@ -60,6 +60,15 @@ Additionally, you can download the latest version of HPO, which requires downloa
 Please see `notebooks/Tutorial.ipynb`
 
 
+## Contact Us
+
+If you encounter any issues during use or have any suggestions, feel free to contact us:
+
+- Email: blwen24@m.fudan.edu.cn
+- Email: ylong2025@163.com
+
+You can also submit an issue on GitHub.
+
 ## Citation
 
 If you use PhenoDP in your research, please cite:
