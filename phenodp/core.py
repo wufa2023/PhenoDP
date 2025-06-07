@@ -256,8 +256,8 @@ class PhenoDP:
         else:
             pad_size = max_len - original_length
             padded_vec = F.pad(vec, (0, 0, 0, pad_size))
-        attention_mask = torch.zeros(max_len, dtype=torch.long)
-        attention_mask[:min(original_length, max_len)] = 1
+        attention_mask = torch.zeros(max_len, dtype=torch.bool)
+        attention_mask[:min(original_length, max_len)] = True
         return padded_vec, attention_mask
 
     def get_all_embedding_pre(self):
@@ -496,11 +496,10 @@ class PhenoDP:
         vec1 = self.get_hps_vec(hps)
         vec1 = torch.tensor(vec1)
         vec1, mask1 = self.pad_or_truncate(vec1)
-        mask1 = torch.tensor([1] + list(mask1))
-        np.where(mask1)
+        mask1 = torch.tensor([True] + list(mask1))
+        item_len = len(torch.where(mask1)[0])
         vec1 = vec1.unsqueeze(0)
         mask1 = mask1.unsqueeze(0)
-        item_len = len(torch.where(mask1 == 1)[0])
         self.PCL_HPOEncoder.eval()
         with torch.no_grad():
             cls, emb = self.PCL_HPOEncoder(vec1, mask1)

@@ -10,19 +10,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import random
-import pandas as pd
 import numpy as np
-from scipy.stats import fisher_exact
-from tqdm import tqdm
 import dgl
-import obonet
-import networkx as nx
-
-# PyTorch Libraries
-from torch.utils.data import DataLoader
-
-# Transformers Libraries
-from transformers import AutoTokenizer, T5ForConditionalGeneration
 
 # Other Libraries
 from pyhpo.ontology import Ontology
@@ -47,7 +36,6 @@ class PCL_HPOEncoder(nn.Module):
         vec = torch.cat((cls_tokens, vec), dim=1)
         vec = vec.permute(1, 0, 2)
         
-        mask = mask.bool()
         vec = self.transformer_encoder(vec, src_key_padding_mask=mask)
         
         cls_embedding = vec[0]
@@ -197,8 +185,8 @@ def pad_or_truncate(vec, max_len=128):
     else:
         pad_size = max_len - original_length
         padded_vec = F.pad(vec, (0, 0, 0, pad_size))
-    attention_mask = torch.zeros(max_len, dtype=torch.float32)
-    attention_mask[:min(original_length, max_len)] = 1
+    attention_mask = torch.zeros(max_len, dtype=torch.bool)
+    attention_mask[:min(original_length, max_len)] = True
     return padded_vec, attention_mask
 
 
@@ -213,14 +201,14 @@ def get_training_sample(disease_db, disease_dict, node_embedding, n=2000):
         d_hps = get_hpos(d, disease_dict, p=0.7)
         vec = torch.tensor(get_hps_vec(d_hps, node_embedding))
         vec, mask = pad_or_truncate(vec)
-        mask = torch.tensor([1] + list(mask))
+        mask = torch.tensor([True] + list(mask))
         v1_list.append(vec)
         mask1_list.append(mask)
         
         d_hps = get_hpos(d, disease_dict, p=0.7)
         vec = torch.tensor(get_hps_vec(d_hps, node_embedding))
         vec, mask = pad_or_truncate(vec)
-        mask = torch.tensor([1] + list(mask))
+        mask = torch.tensor([True] + list(mask))
         v2_list.append(vec)
         mask2_list.append(mask)
         
