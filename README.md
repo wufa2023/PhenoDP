@@ -3,6 +3,8 @@
 
 PhenoDP is an advanced toolkit for phenotype-driven disease diagnosis and prioritization using Human Phenotype Ontology (HPO) data. It offers a powerful **Summarizer** for clinical summaries, a **Ranker** for disease prioritization, and a **Recommender** for HPO term suggestion.
 
+![phenodp framework](data/phenodp.jpg)
+
 ## Features
 
 - **Summarizer**: Utilizes a distilled Bio-Medical-3B-CoT model to generate high-quality, patient-centered clinical summaries from HPO terms, enhancing the interpretability of symptoms.
