@@ -120,36 +120,6 @@ class PhenoDP_Initial:
             sim = self.get_hpo2disease_sim(hp, disease)
             return sim * self.get_hpo_weight(hp)
     
-
-
-    def initial(self):
-        for count, i in enumerate(tqdm(self.hpo_list, desc="HPO Processing")):
-            if i == 'HP:0000001' or i == 'HP:0000118':
-                self.hpo2disease_scores.append([0 for t in range(self.disease_len)])
-                continue
-            hp2disease_scores = []
-            for j in self.disease_list:
-                hp2disease_scores.append(self.get_hpo2disease_score(i, j))
-            self.hpo2disease_scores.append(hp2disease_scores)
-            self.processed_hpos.append(i)
-        print('end')
-        return self.hpo2disease_scores, self.processed_hpos
-
-    def initial_split(self, start, end):
-        print('total hpo len:', len(self.hpo_list))
-        for count, i in enumerate(tqdm(self.hpo_list[start:end], desc="HPO Processing")):
-            if i == 'HP:0000001' or i == 'HP:0000118':
-                self.hpo2disease_scores.append([0 for t in range(self.disease_len)])
-                self.processed_hpos.append(i)
-                continue
-            hp2disease_scores = []
-            for count2, j in enumerate(self.disease_list):
-                hp2disease_scores.append(self.get_hpo2disease_score(i, j))
-            self.hpo2disease_scores.append(hp2disease_scores)
-            self.processed_hpos.append(i)
-        print('end')
-        return self.hpo2disease_scores, self.processed_hpos
-    
     def get_normal_sim(self, hp, disease):
         D = self.disease_dict_str[disease]
         if hp in D:
@@ -159,32 +129,28 @@ class PhenoDP_Initial:
             return sim 
         
     def initial_sim(self, start, end):
-        print('total hpo len:', len(self.hpo_list))
-        for count, i in enumerate(tqdm(self.hpo_list[start:end], desc="HPO Processing")):
-            if i == 'HP:0000001' or i == 'HP:0000118':
+        for hp in tqdm(self.hpo_list[start:end], desc="HPO Processing"):
+            if hp == 'HP:0000001' or hp == 'HP:0000118':
                 self.hpo2normal_sim.append([0 for t in range(self.disease_len)])
-                self.processed_hpos_sim.append(i)
+                self.processed_hpos_sim.append(hp)
                 continue
             hp2disease_sim = []
-            for count2, j in enumerate(self.disease_list):
-                hp2disease_sim.append(self.get_normal_sim(i, j))
+            for disease in self.disease_list:
+                hp2disease_sim.append(self.get_normal_sim(hp, disease))
             self.hpo2normal_sim.append(hp2disease_sim)
-            self.processed_hpos_sim.append(i)
-        print('end')
+            self.processed_hpos_sim.append(hp)
         return self.hpo2normal_sim, self.processed_hpos_sim
     
     def initial_sim_singlecore(self):
-        print('total hpo len:', len(self.hpo_list))
-        for count, i in enumerate(tqdm(self.hpo_list, desc="HPO Processing")):
-            if i == 'HP:0000001' or i == 'HP:0000118':
+        for hp in tqdm(self.hpo_list, desc="HPO Processing"):
+            if hp == 'HP:0000001' or hp == 'HP:0000118':
                 self.hpo2normal_sim.append([0 for t in range(self.disease_len)])
-                self.processed_hpos_sim.append(i)
+                self.processed_hpos_sim.append(hp)
                 continue
             hp2disease_sim = []
-            for count2, j in enumerate(self.disease_list):
-                hp2disease_sim.append(self.get_normal_sim(i, j))
+            for disease in self.disease_list:
+                hp2disease_sim.append(self.get_normal_sim(hp, disease))
             self.hpo2normal_sim.append(hp2disease_sim)
-            self.processed_hpos_sim.append(i)
-        print('end')
+            self.processed_hpos_sim.append(hp)
         return self.hpo2normal_sim, self.processed_hpos_sim
     

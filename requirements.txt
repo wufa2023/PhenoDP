@@ -1,0 +1,15 @@
+torch==2.3.1
+torchvision==0.18.1
+torchaudio==2.3.1
+
+transformers
+pandas
+numpy
+tqdm
+scipy
+obonet
+networkx
+pyhpo==3.3.2
+
+dgl
+accelerate
