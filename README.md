@@ -67,7 +67,7 @@ Please see `notebooks/Tutorial.ipynb`
 If you encounter any issues during use or have any suggestions, feel free to contact us:
 
 - Email: blwen24@m.fudan.edu.cn
-- Email: ylong2025@163.com
+- Email: longyi@mail.nankai.edu.cn
 
 You can also submit an issue on GitHub.
 
