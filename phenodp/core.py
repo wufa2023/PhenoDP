@@ -496,10 +496,10 @@ class PhenoDP:
         vec1 = self.get_hps_vec(hps)
         vec1 = torch.tensor(vec1)
         vec1, mask1 = self.pad_or_truncate(vec1)
-        mask1 = torch.tensor([True] + list(mask1))
-        item_len = len(torch.where(mask1)[0])
+        mask1 = torch.tensor([1] + list(mask1))
+        item_len = len(torch.where(mask1 == 1)[0])
         vec1 = vec1.unsqueeze(0)
-        mask1 = mask1.unsqueeze(0)
+        mask1 = mask1.unsqueeze(0).float()
         self.PCL_HPOEncoder.eval()
         with torch.no_grad():
             cls, emb = self.PCL_HPOEncoder(vec1, mask1)
