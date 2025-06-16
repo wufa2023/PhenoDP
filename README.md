@@ -71,6 +71,8 @@ If you encounter any issues during use or have any suggestions, feel free to con
 
 You can also submit an issue on GitHub.
 
+For more information about our research, please visit our [lab website](http://tianlab-bioinfo.github.io/).
+
 ## Important Notice
 
 In addition, we observed that the language model may occasionally generate additional outputs, such as candidate gene suggestions, even when not explicitly prompted to do so. While these suggestions can be biologically plausible—as illustrated in our manuscript by the example involving FGFR2 and TNXB—they should be interpreted cautiously. The model's inferences are shaped by patterns in its training data and do not constitute verified clinical recommendations. Users are advised to critically assess such outputs in the context of clinical and molecular evidence.
